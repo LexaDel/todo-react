@@ -15,12 +15,19 @@ class Modal extends React.Component {
 
     onSubmit = () => {
         const { todos } = this.props.store;
-        this.props.store.add({
-            id: todos.length + 1,
-            title: this.todo.title,
-            description: this.todo.description,
-            completed: false,
-        });
+        if (!this.todo) {
+            this.props.store.addTask({
+                id: todos.length + 1,
+                title: this.todo.title,
+                description: this.todo.description,
+                completed: false,
+            });
+        } else {
+            this.props.store.updateTask({
+                title: this.todo.title,
+                description: this.todo.description,
+            });
+        }
         this.props.store.closeModal();
     };
 
@@ -34,7 +41,7 @@ class Modal extends React.Component {
 
     render() {
         const { title } = this.props;
-        const { isOpenModal } = this.props.store;
+        const { isOpenModal, editTask } = this.props.store;
         return (
             <>
                 {isOpenModal && (
@@ -57,12 +64,14 @@ class Modal extends React.Component {
                                                 label="Title"
                                                 variant="outlined"
                                                 fullWidth
+                                                value={editTask.title}
                                                 onChange={this.onChange}
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
                                             <TextField
                                                 name="description"
+                                                value={editTask.description}
                                                 onChange={this.onChange}
                                                 label="Description"
                                                 variant="outlined"

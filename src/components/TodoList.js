@@ -2,20 +2,14 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { observer, inject } from 'mobx-react';
 import Modal from './Modal';
-import {
-    Grid,
-    ListItem,
-    ListItemText,
-    ListItemSecondaryAction,
-    IconButton,
-    List,
-} from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Grid, List } from '@material-ui/core';
+import Todo from './Todo';
 
 class TodoList extends React.Component {
     handleOpenModal = () => {
         this.props.store.openModal();
     };
+
     render() {
         const { todos } = this.props.store;
         return (
@@ -29,16 +23,7 @@ class TodoList extends React.Component {
                     <Grid item xs={6} md={2}>
                         <List>
                             {todos.map((todo) => (
-                                <ListItem>
-                                    <ListItemText primary={todo.title} />
-                                    <ListItemSecondaryAction>
-                                        <IconButton
-                                            edge="end"
-                                            aria-label="delete">
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
+                                <Todo key={todo.id} todo={todo} />
                             ))}
                         </List>
                     </Grid>
