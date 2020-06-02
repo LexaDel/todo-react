@@ -5,6 +5,7 @@ configure({ enforceActions: 'observed' });
 const store = observable(
     {
         todos: JSON.parse(window.localStorage.getItem('TodoStore')) || [],
+        isOpenModal: false,
 
         add(todo) {
             this.todos.push(todo);
@@ -13,9 +14,19 @@ const store = observable(
                 JSON.stringify(this.todos)
             );
         },
+
+        openModal() {
+            this.isOpenModal = true;
+        },
+
+        closeModal() {
+            this.isOpenModal = false;
+        },
     },
     {
         add: action,
+        openModal: action,
+        closeModal: action,
     }
 );
 
