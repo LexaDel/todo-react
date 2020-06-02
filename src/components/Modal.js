@@ -8,6 +8,7 @@ import { inject, observer } from 'mobx-react';
 class Modal extends React.Component {
     onSubmit = () => {
         const { _editTask } = this.props.store;
+
         if (_editTask.id === 0) {
             this.props.store.addTask({
                 title: _editTask.title,

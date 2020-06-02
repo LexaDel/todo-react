@@ -12,9 +12,12 @@ class TodoList extends React.Component {
 
     render() {
         const { todos } = this.props.store;
+        const sortedTodos = todos.sort((a, b) => {
+            return a.title === b.title ? 0 : a.title < b.title ? 1 : -1;
+        });
         return (
             <>
-                <div>TodoList</div>
+                <h1>TodoList</h1>
                 <Button variant="outlined" onClick={this.handleOpenModal}>
                     New Todo
                 </Button>
@@ -22,7 +25,7 @@ class TodoList extends React.Component {
                 <Grid>
                     <Grid item xs={6} md={2}>
                         <List>
-                            {todos.map((todo) => (
+                            {sortedTodos.map((todo) => (
                                 <Todo key={todo.id} todo={todo} />
                             ))}
                         </List>
