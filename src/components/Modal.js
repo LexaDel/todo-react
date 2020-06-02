@@ -6,42 +6,40 @@ import './Modal.css';
 import { inject, observer } from 'mobx-react';
 
 class Modal extends React.Component {
-    todo = {
-        id: 0,
-        title: '',
-        description: '',
-        completed: false,
-    };
+    defaultTask = {};
 
     onSubmit = () => {
-        const { todos } = this.props.store;
-        if (!this.todo) {
+        const { todos, _editTask } = this.props.store;
+        console.log(_editTask);
+        if (_editTask.id === 0) {
             this.props.store.addTask({
                 id: todos.length + 1,
-                title: this.todo.title,
-                description: this.todo.description,
+                title: _editTask.title,
+                description: _editTask.description,
                 completed: false,
             });
         } else {
-            this.props.store.updateTask({
-                title: this.todo.title,
-                description: this.todo.description,
-            });
+            this.props.store.updateTask();
         }
         this.props.store.closeModal();
     };
 
     onCancel = () => {
+        this.props.store.resetTask({
+            title: this.defaultTask.title,
+            description: this.defaultTask.description,
+        });
         this.props.store.closeModal();
     };
 
     onChange = (e) => {
-        this.todo[e.target.name] = e.target.value;
+        this.props.store.editTask(e.target.name, e.target.value);
     };
 
     render() {
         const { title } = this.props;
-        const { isOpenModal, editTask } = this.props.store;
+        const { isOpenModal, _editTask } = this.props.store;
+        this.defaultTask = _editTask;
         return (
             <>
                 {isOpenModal && (
@@ -64,14 +62,22 @@ class Modal extends React.Component {
                                                 label="Title"
                                                 variant="outlined"
                                                 fullWidth
-                                                value={editTask.title}
+                                                value={
+                                                    _editTask
+                                                        ? _editTask.title
+                                                        : ''
+                                                }
                                                 onChange={this.onChange}
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
                                             <TextField
                                                 name="description"
-                                                value={editTask.description}
+                                                value={
+                                                    _editTask
+                                                        ? _editTask.description
+                                                        : ''
+                                                }
                                                 onChange={this.onChange}
                                                 label="Description"
                                                 variant="outlined"
