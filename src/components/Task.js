@@ -9,29 +9,29 @@ import {
 import { Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
 import { inject, observer } from 'mobx-react';
 
-class Todo extends React.Component {
+class Task extends React.Component {
     handleOpenEditModal = () => {
-        this.props.store.setEditTask(this.props.todo);
+        this.props.store.setEditTask(this.props.task);
         this.props.store.openModal();
     };
 
     handleRemoveTask = () => {
-        this.props.store.removeTask(this.props.todo);
+        this.props.store.removeTask(this.props.task);
     };
 
     handleToggleCompletedTask = () => {
-        this.props.store.toggleCompletedTask(this.props.todo);
+        this.props.store.toggleCompletedTask(this.props.task);
     };
 
     render() {
-        const { todo } = this.props;
+        const { task } = this.props;
         return (
             <ListItem>
-                <ListItemText primary={todo.title} />
+                <ListItemText primary={task.title} />
                 <ListItemSecondaryAction>
                     <Checkbox
                         color="primary"
-                        checked={todo.completed}
+                        checked={task.completed}
                         inputProps={{ 'aria-label': 'primary checkbox' }}
                         onChange={this.handleToggleCompletedTask}
                     />
@@ -53,4 +53,4 @@ class Todo extends React.Component {
     }
 }
 
-export default inject('store')(observer(Todo));
+export default inject('store')(observer(Task));

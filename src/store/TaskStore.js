@@ -4,7 +4,7 @@ configure({ enforceActions: 'observed', computedRequiresReaction: true });
 
 const store = observable(
     {
-        todos: JSON.parse(window.localStorage.getItem('TodoStore')) || [],
+        tasks: JSON.parse(window.localStorage.getItem('TaskStore')) || [],
         isOpenModal: false,
         _editTask: null,
         defaultTitle: '',
@@ -13,13 +13,13 @@ const store = observable(
         saveToLocalStorage() {
             window.localStorage.setItem(
                 'TodoStore',
-                JSON.stringify(this.todos)
+                JSON.stringify(this.tasks)
             );
         },
 
         addTask(task) {
-            task.id = Math.max(...this.todos.map((todo) => todo.id)) + 1;
-            this.todos.push(task);
+            task.id = Math.max(...this.tasks.map((task) => task.id)) + 1;
+            this.tasks.push(task);
             this._editTask = null;
             this.saveToLocalStorage();
         },
@@ -68,7 +68,7 @@ const store = observable(
 
         removeTask(task) {
             task.isDelete = true;
-            this.todos = this.todos.filter((todo) => !todo.isDelete);
+            this.tasks = this.tasks.filter((task) => !task.isDelete);
             this.saveToLocalStorage();
         },
 
