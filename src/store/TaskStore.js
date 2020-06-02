@@ -9,10 +9,11 @@ const store = observable(
         _editTask: null,
         defaultTitle: '',
         defaultDescription: '',
+        isError: false,
 
         saveToLocalStorage() {
             window.localStorage.setItem(
-                'TodoStore',
+                'TaskStore',
                 JSON.stringify(this.tasks)
             );
         },
@@ -76,6 +77,10 @@ const store = observable(
             task.completed = !task.completed;
             this.saveToLocalStorage();
         },
+
+        error(state) {
+            this.isError = state;
+        },
     },
     {
         addTask: action,
@@ -88,6 +93,7 @@ const store = observable(
         toggleCompletedTask: action,
         editTask: action,
         resetTask: action,
+        error: action,
     }
 );
 

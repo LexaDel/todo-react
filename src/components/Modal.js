@@ -6,24 +6,37 @@ import './Modal.css';
 import { inject, observer } from 'mobx-react';
 
 class Modal extends React.Component {
+    validate = () => {
+        const { _editTask } = this.props.store;
+        if (_editTask && _editTask.title) {
+            return false;
+        } else {
+            return true;
+        }
+    };
+
     onSubmit = () => {
         const { _editTask } = this.props.store;
-
-        if (_editTask.id === 0) {
-            this.props.store.addTask({
-                title: _editTask.title,
-                description: _editTask.description,
-                completed: false,
-            });
-        } else {
-            this.props.store.updateTask();
+        const err = this.validate();
+        if (!err) {
+            if (_editTask.id === 0) {
+                this.props.store.addTask({
+                    title: _editTask.title,
+                    description: _editTask.description,
+                    completed: false,
+                });
+            } else {
+                this.props.store.updateTask();
+            }
+            this.props.store.closeModal();
         }
-        this.props.store.closeModal();
+        this.props.store.error(err);
     };
 
     onCancel = () => {
         this.props.store._editTask && this.props.store.resetTask();
         this.props.store.closeModal();
+        this.props.store.error(false);
     };
 
     onChange = (e) => {
@@ -31,7 +44,7 @@ class Modal extends React.Component {
     };
 
     render() {
-        const { isOpenModal, _editTask } = this.props.store;
+        const { isOpenModal, _editTask, isError } = this.props.store;
         return (
             <>
                 {isOpenModal && (
@@ -50,10 +63,12 @@ class Modal extends React.Component {
                                         alignItems="stretch">
                                         <Grid item xs={12}>
                                             <TextField
+                                                error={isError}
                                                 name="title"
                                                 label="Title"
                                                 variant="outlined"
                                                 fullWidth
+                                                required
                                                 value={
                                                     _editTask
                                                         ? _editTask.title
