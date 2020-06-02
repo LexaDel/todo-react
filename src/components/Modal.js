@@ -6,14 +6,10 @@ import './Modal.css';
 import { inject, observer } from 'mobx-react';
 
 class Modal extends React.Component {
-    defaultTask = {};
-
     onSubmit = () => {
-        const { todos, _editTask } = this.props.store;
-        console.log(_editTask);
+        const { _editTask } = this.props.store;
         if (_editTask.id === 0) {
             this.props.store.addTask({
-                id: todos.length + 1,
                 title: _editTask.title,
                 description: _editTask.description,
                 completed: false,
@@ -25,10 +21,7 @@ class Modal extends React.Component {
     };
 
     onCancel = () => {
-        this.props.store.resetTask({
-            title: this.defaultTask.title,
-            description: this.defaultTask.description,
-        });
+        this.props.store._editTask && this.props.store.resetTask();
         this.props.store.closeModal();
     };
 
@@ -37,9 +30,7 @@ class Modal extends React.Component {
     };
 
     render() {
-        const { title } = this.props;
         const { isOpenModal, _editTask } = this.props.store;
-        this.defaultTask = _editTask;
         return (
             <>
                 {isOpenModal && (
@@ -47,7 +38,7 @@ class Modal extends React.Component {
                         <div className="modal-overlay">
                             <div className="modal-window">
                                 <div className="modal-header">
-                                    <div className="modal-title">{title}</div>
+                                    <div className="modal-title">Task</div>
                                 </div>
                                 <div className="modal-body">
                                     <Grid

@@ -7,6 +7,8 @@ const store = observable(
         todos: JSON.parse(window.localStorage.getItem('TodoStore')) || [],
         isOpenModal: false,
         _editTask: null,
+        defaultTitle: '',
+        defaultDescription: '',
 
         saveToLocalStorage() {
             window.localStorage.setItem(
@@ -16,7 +18,10 @@ const store = observable(
         },
 
         addTask(task) {
+            task.id = Math.max(...this.todos.map((todo) => todo.id)) + 1;
             this.todos.push(task);
+            this._editTask = null;
+            this.saveToLocalStorage();
         },
 
         openModal() {
@@ -29,6 +34,8 @@ const store = observable(
 
         setEditTask(task) {
             this._editTask = task;
+            this.defaultTitle = task.title;
+            this.defaultDescription = task.description;
         },
 
         getEditTask() {
@@ -47,12 +54,11 @@ const store = observable(
             this._editTask[property] = value;
         },
 
-        resetTask({ title, description }) {
-            console.log(this._editTask);
-            this._editTask.title = title;
-            this._editTask.description = description;
-            this.saveToLocalStorage();
+        resetTask() {
+            this._editTask.title = this.defaultTitle;
+            this._editTask.description = this.defaultDescription;
             this._editTask = null;
+            this.saveToLocalStorage();
         },
 
         updateTask() {
